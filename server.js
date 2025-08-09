@@ -30,6 +30,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/termos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'termos.html'));
+});
+
+// SEO files
+app.get('/sitemap.xml', (req, res) => {
+  res.type('application/xml');
+  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
 // Endpoint para fornecer configurações ao frontend
 app.get('/api/config', (req, res) => {
   res.json({
