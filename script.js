@@ -58,14 +58,64 @@ function validateForm() {
 
 document.addEventListener('DOMContentLoaded', async function() {
     await loadConfig();
-    
+
     const nameInput = document.getElementById('nameInput');
     const emailInput = document.getElementById('emailInput');
     const consentCheckbox = document.getElementById('consentCheckbox');
 
-    if (nameInput) nameInput.addEventListener('input', validateForm);
-    if (emailInput) emailInput.addEventListener('input', validateForm);
-    if (consentCheckbox) consentCheckbox.addEventListener('change', validateForm);
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            validateForm();
+            if (typeof gtag !== 'undefined' && nameInput.value.length > 0) {
+                gtag('event', 'form_start', {
+                    'event_category': 'engagement',
+                    'event_label': 'name_field'
+                });
+            }
+        });
+
+        nameInput.addEventListener('focus', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_interaction', {
+                    'event_category': 'engagement',
+                    'event_label': 'name_field_focus'
+                });
+            }
+        });
+    }
+
+    if (emailInput) {
+        emailInput.addEventListener('input', function() {
+            validateForm();
+            if (typeof gtag !== 'undefined' && emailInput.value.length > 0) {
+                gtag('event', 'form_start', {
+                    'event_category': 'engagement',
+                    'event_label': 'email_field'
+                });
+            }
+        });
+
+        emailInput.addEventListener('focus', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_interaction', {
+                    'event_category': 'engagement',
+                    'event_label': 'email_field_focus'
+                });
+            }
+        });
+    }
+
+    if (consentCheckbox) {
+        consentCheckbox.addEventListener('change', function() {
+            validateForm();
+            if (typeof gtag !== 'undefined' && consentCheckbox.checked) {
+                gtag('event', 'form_interaction', {
+                    'event_category': 'engagement',
+                    'event_label': 'consent_accepted'
+                });
+            }
+        });
+    }
 
     validateForm();
 
@@ -129,8 +179,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'manifesto_signed', {
                             'event_category': 'engagement',
-                            'event_label': name
+                            'event_label': name,
+                            'value': 1
                         });
+
+                        gtag('event', 'conversion', {
+                            'send_to': 'AW-17587495960/C1A0CIbV854bEJjIr8JB',
+                            'value': 1.0,
+                            'currency': 'BRL'
+                        });
+
+                        gtag('event', 'sign_up', {
+                            'method': 'manifesto_form'
+                        });
+
+                        if (email) {
+                            gtag('event', 'beta_tester_signup', {
+                                'event_category': 'engagement',
+                                'event_label': 'with_email'
+                            });
+                        }
                     }
 
                 } else {
